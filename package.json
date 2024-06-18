@@ -1,0 +1,19 @@
+{
+  "name": "squadserver_discordbot",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.15.3",
+    "fs": "^0.0.1-security",
+    "ssh2": "^1.15.0"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "token": "bot_token",
+  "activity": "Squad Server Name (or custom)",
+  "clientId": "bot_client_id",
+  "guildId": "guild_id",
+  "serverPath": "/home/*****/squadserver",
+  "modPath": "/home/*****/serverfiles/SquadGame/Plugins/Mods/393380",
+  "configPath": "/home/*****/config",
+  "serverConfigPath": "/home/*****/serverfiles/SquadGame/ServerConfig",
+  "mods": [
+    { "name": "French Faction", "id": "2618610732" },
+    { "name": "Douentza", "id": "2618861931" },
+    { "name": "Entrer manuellement", "id": " " }
+  ]
+}

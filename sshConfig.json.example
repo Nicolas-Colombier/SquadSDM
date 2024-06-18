@@ -1,0 +1,6 @@
+{
+  "host": "server_ip_address",
+  "port": 22,
+  "username": "server_username",
+  "password": "server_password",
+}
