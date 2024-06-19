@@ -2,9 +2,20 @@ import { SlashCommandBuilder, PermissionsBitField } from 'discord.js';
 import config from '../config.json' assert { type: "json" };
 import { executeCommands } from '../utils/executeCommands.js';
 
+// Génération dynamique des choix pour les serveurs
+const serverChoices = Object.keys(config.servers).map(server => ({
+    name: server,
+    value: server
+}));
+
 export const data = new SlashCommandBuilder()
     .setName('restart')
     .setDescription('Redémarrage du serveur.')
+    .addStringOption(option =>
+        option.setName('server')
+            .setDescription('Nom du serveur')
+            .setRequired(true)
+            .addChoices(...serverChoices))
     // (0) = Nécessite la permission d'administrateur
     .setDefaultMemberPermissions(0)
     // Permet ou non l'exécution de la commande en message privé
@@ -17,15 +28,18 @@ export async function execute(interaction) {
             return await interaction.reply('Vous n\'avez pas la permission de redémarrer le serveur.');
         }
 
+        const server = interaction.options.getString('server');
+        const serverConfig = config.servers[server];
+
         const commandInfo = [
             {
-                command: `${config.serverPath} restart`,
+                command: `${serverConfig.serverPath} restart`,
                 description: 'Redémarrage du serveur',
                 checkOutput: (output) => output.includes('OK'),
             },
         ];
 
-        await executeCommands(interaction, commandInfo);
+        await executeCommands(interaction, commandInfo, serverConfig.ssh);
     } catch (error) {
         console.error(error);
         await interaction.reply('Il y a eu une erreur en tentant de redémarrer le serveur.');

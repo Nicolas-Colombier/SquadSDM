@@ -2,6 +2,12 @@ import { SlashCommandBuilder, PermissionsBitField } from 'discord.js';
 import config from '../config.json' assert { type: "json" };
 import { executeCommands } from '../utils/executeCommands.js';
 
+// Génération dynamique des choix pour les serveurs
+const serverChoices = Object.keys(config.servers).map(server => ({
+    name: server,
+    value: server
+}));
+
 // Génération dynamique des choix
 const modChoices = config.mods.map(mod => ({
     name: mod.name,
@@ -11,6 +17,11 @@ const modChoices = config.mods.map(mod => ({
 export const data = new SlashCommandBuilder()
     .setName('updatemod')
     .setDescription('Mise à jour ou ajout d\'un mod.')
+    .addStringOption(option =>
+        option.setName('server')
+            .setDescription('Nom du serveur')
+            .setRequired(true)
+            .addChoices(...serverChoices))
     .addStringOption(option =>
         option.setName('modid')
             .setDescription('ID du mod')
@@ -32,6 +43,9 @@ export async function execute(interaction) {
             return await interaction.reply('Vous n\'avez pas la permission de mettre à jour ou ajouter un mod au serveur.');
         }
 
+        const server = interaction.options.getString('server');
+        const serverConfig = config.servers[server];
+
         let modId = interaction.options.getString('modid');
         const customModId = interaction.options.getString('customid');
 
@@ -46,12 +60,12 @@ export async function execute(interaction) {
 
         const commandInfo = [
             {
-                command: `/usr/games/steamcmd +force_install_dir "${config.modPath}" +login anonymous +workshop_download_item 393380 ${modId} validate +quit`,
+                command: `/usr/games/steamcmd +force_install_dir "${serverConfig.modPath}" +login anonymous +workshop_download_item 393380 ${modId} validate +quit`,
                 description: 'Téléchargement du mod',
                 checkOutput: (output) => output.includes('Success'),
             },
             {
-                command: `rm -r ${config.modPath}/${modId}`,
+                command: `rm -r ${serverConfig.modPath}/${modId}`,
                 description: 'Suppression de l\'ancien mod',
                 checkOutput: (output) => true,
             },
@@ -61,18 +75,18 @@ export async function execute(interaction) {
                 checkOutput: () => true,
             },
             {
-                command: `mv ${config.modPath}/steamapps/workshop/content/393380/${modId} ${config.modPath}`,
+                command: `mv ${serverConfig.modPath}/steamapps/workshop/content/393380/${modId} ${serverConfig.modPath}`,
                 description: 'Déplacement du nouveau mod dans le bon répertoire',
                 checkOutput: (output) => true,
             },
             {
-                command: `rm -r ${config.modPath}/steamapps`,
+                command: `rm -r ${serverConfig.modPath}/steamapps`,
                 description: 'Suppression du répertoire steamapps',
                 checkOutput: (output) => true,
             },
         ];
 
-        await executeCommands(interaction, commandInfo);
+        await executeCommands(interaction, commandInfo, serverConfig.ssh);
     } catch (error) {
         console.error(error);
         await interaction.reply('Il y a eu une erreur en tentant de mettre à jour ou ajouter un mod au serveur.');

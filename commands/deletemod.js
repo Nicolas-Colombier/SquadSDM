@@ -3,6 +3,12 @@ import config from '../config.json' assert { type: "json" };
 import { executeCommands } from '../utils/executeCommands.js';
 import { checkDirectoryExists } from "../utils/checkDirectoryExists.js";
 
+// Génération dynamique des choix pour les serveurs
+const serverChoices = Object.keys(config.servers).map(server => ({
+    name: server,
+    value: server
+}));
+
 // Génération dynamique des choix
 const modChoices = config.mods.map(mod => ({
     name: mod.name,
@@ -12,6 +18,11 @@ const modChoices = config.mods.map(mod => ({
 export const data = new SlashCommandBuilder()
     .setName('deletemod')
     .setDescription('Suppresion d\'un mod.')
+    .addStringOption(option =>
+        option.setName('server')
+            .setDescription('Nom du serveur')
+            .setRequired(true)
+            .addChoices(...serverChoices))
     .addStringOption(option =>
         option.setName('modid')
             .setDescription('ID du mod')
@@ -33,6 +44,9 @@ export async function execute(interaction) {
             return await interaction.reply('Vous n\'avez pas la permission de supprimer un mod du serveur.');
         }
 
+        const server = interaction.options.getString('server');
+        const serverConfig = config.servers[server];
+
         let modId = interaction.options.getString('modid');
         const customModId = interaction.options.getString('customid');
 
@@ -45,9 +59,9 @@ export async function execute(interaction) {
             return await interaction.reply('Veuillez fournir un ID de mod valide.');
         }
 
-        const modDirectory = config.modPath + "/" + modId;
+        const modDirectory = serverConfig.modPath + "/" + modId;
 
-        const directoryExists = await checkDirectoryExists(modDirectory);
+        const directoryExists = await checkDirectoryExists(modDirectory, serverConfig.ssh);
 
         if (!directoryExists) {
             await interaction.reply(`\`\`\`Le mod "${modId}" n'existe pas.\`\`\``);
@@ -62,7 +76,7 @@ export async function execute(interaction) {
             },
         ];
 
-        await executeCommands(interaction, commandInfo);
+        await executeCommands(interaction, commandInfo, serverConfig.ssh);
     } catch (error) {
         console.error(error);
         await interaction.reply('Il y a eu une erreur en tentant de supprimer un mod du serveur.');
