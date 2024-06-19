@@ -1,7 +1,6 @@
 import { Client } from 'ssh2';
-import sshConfig from '../sshConfig.json' assert { type: "json" };
 
-export function listDirectories(directory) {
+export function listDirectories(directory, sshConfig) {
     return new Promise((resolve, reject) => {
         const conn = new Client();
 

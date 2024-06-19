@@ -1,7 +1,6 @@
 import { Client } from 'ssh2';
-import sshConfig from '../sshConfig.json' assert { type: "json" };
 
-export function checkDirectoryExists(directory) {
+export function checkDirectoryExists(directory, sshConfig) {
     return new Promise((resolve, reject) => {
         const conn = new Client();
         conn.on('ready', () => {

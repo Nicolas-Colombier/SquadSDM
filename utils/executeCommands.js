@@ -1,8 +1,7 @@
 import ssh2 from 'ssh2';
-import sshConfig from '../sshConfig.json' assert { type: "json" };
 import { chunkString } from "./chunkString.js";
 
-export async function executeCommands(interaction, commandInfo) {
+export async function executeCommands(interaction, commandInfo, sshConfig) {
     const results = [];
     const maxMessageLength = 1500; // Maximum length of a Discord message
 
@@ -12,7 +11,7 @@ export async function executeCommands(interaction, commandInfo) {
     for (let index = 0; index < commandInfo.length; index++) {
         const cmd = commandInfo[index];
         try {
-            const output = await executeSSHCommand(cmd.command);
+            const output = await executeSSHCommand(cmd.command, sshConfig);
             const status = cmd.checkOutput(output) ? 'Réussi' : 'Échec';
             results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}`);
         } catch (error) {
@@ -28,7 +27,7 @@ export async function executeCommands(interaction, commandInfo) {
 
 
 // Fonction pour exécuter une commande SSH
-function executeSSHCommand(command) {
+function executeSSHCommand(command, sshConfig) {
     return new Promise((resolve, reject) => {
         const ssh = new ssh2.Client();
         ssh.on('ready', () => {
@@ -59,19 +58,19 @@ function executeSSHCommand(command) {
 async function sendResults(interaction, results, maxMessageLength) {
     let response = '';
     for (const result of results) {
-        response += `\`\`\`${result}\`\`\``;
+        response += `${result}\n`;
         if (response.length > maxMessageLength) {
-            const chunks = chunkString(response, maxMessageLength);
-            await interaction.editReply({ content: `${chunks.shift()}\`\`\`` });
+            const chunks = chunkString(response, maxMessageLength-4);
+            await interaction.editReply({ content: `\`\`\`${chunks.shift()}\`\`\`` });
             for (const chunk of chunks) {
-                await interaction.followUp({ content: `\`\`\`${chunk}` });
+                await interaction.followUp({ content: `\`\`\`${chunk}\`\`\`` });
             }
             response = '';
         }
     }
 
     if (response.length > 0) {
-        await interaction.editReply({ content: response });
+        await interaction.editReply({ content: `\`\`\`${response}\`\`\`` });
     }
 }
 
