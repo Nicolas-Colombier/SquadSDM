@@ -4,7 +4,7 @@ import { handleConfigSelection } from "./configHandler.js";
 export const execute = async (interaction, client) => {
     if (interaction.commandName) {
         await handleCommand(interaction, client);
-    } else if (interaction.isStringSelectMenu() && interaction.customId === 'selectConfig') {
+    } else if (interaction.isStringSelectMenu() && interaction.customId.startsWith('selectConfig|')) {
         await handleConfigSelection(interaction);
     }
 }
