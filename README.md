@@ -7,9 +7,11 @@
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#dependencies">Dependencies</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#discord-bot-identity">Discord bot identity</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#running-the-bot">Running the bot</a> •
-    <a href="https://github.com/Nicolas-Colombier/SquadSDM#usage-&-management">Usage & Management</a> •
+    <a href="https://github.com/Nicolas-Colombier/SquadSDM#usage--management">Usage & Management</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#credits">Credits</a>
 </p>
+
+<br>
 
 ## Overview
 
@@ -25,12 +27,16 @@ It provides essential features like:
 
 If you need help, contact me on Discord : **nom4de**
 
+<br>
+
 ## Requirements
 * Git
 * [Node.js](https://nodejs.org/en/)
 * [LinuxGSM Squad server](https://linuxgsm.com/servers/squadserver/)
 * [SteamCMD](https://docs.linuxgsm.com/steamcmd)
 * SSH access to the server
+
+<br>
 
 ## Dependencies
 **Discord.js** <br>
@@ -45,6 +51,8 @@ Node.js file system module.
 SSH2 client and server modules written in pure JavaScript for node.js.
 [See on npm](https://www.npmjs.com/package/ssh2)
 
+<br>
+
 ## Discord bot identity
 
 1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and create a new application.
@@ -54,6 +62,8 @@ SSH2 client and server modules written in pure JavaScript for node.js.
 5. You can now reset the token and copy it in the `config.json` file as the `token`. **DO NOT SHARE THIS TOKEN WITH ANYONE** (if you do, regenerate it).
 6. Go to the OAuth2 tab and select `bot` in the OAuth2 URL Generator. Then select the permissions you want to give to your bot (I suggest giving it administrator permissions for your server). Select Guild Install as the integration type. You can generate a different link for each server you want to add the bot to.
 7. Copy the generated link and paste it in your browser. You can now add your bot to your server if you are admin.
+
+<br>
 
 ## Installation
 
@@ -82,6 +92,8 @@ cp config.json.example config.json
 - `guildID` : Your Discord server ID
 - `mods` : The list of mods that will be in the 'updatemod' and 'deletemod' commands (**DO NOT DELETE THE LAST ONE**).
 - `server` : Each object is a server, if you have more then just add more object (be careful of the syntaxe). Each server can be on a different machine or user but need SSH access.
+
+<br>
 
 ## Running the bot
 
@@ -136,6 +148,8 @@ sudo systemctl status squad_sdm
 sudo systemctl enable squad_sdm
 ```
 
+<br>
+
 ## Usage & Management
 
 To disable the bot to start on boot (requires sudo access) :
@@ -158,6 +172,8 @@ sudo journalctl -u squad_sdm
 ```sh
 sudo journalctl -fu squad_sdm
 ```
+
+<br>
 
 ## Credits
 
