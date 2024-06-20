@@ -1,3 +1,9 @@
+<div align="center">
+
+<br>
+
+<img src="assets/Squad.png" alt="Logo" width="500"/>
+
 <h1 align="center">Squad SDM</h1>
 <h4 align="center">A JavaScript Discord bot to manage your Squad server </h4>
 
@@ -10,6 +16,7 @@
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#usage--management">Usage & Management</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#credits">Credits</a>
 </p>
+</div>
 
 <br>
 
