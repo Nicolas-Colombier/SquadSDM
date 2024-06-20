@@ -1,21 +1,22 @@
 import ssh2 from 'ssh2';
 import { chunkString } from "./chunkString.js";
 
+// Method to execute a list of commands
 export async function executeCommands(interaction, commandInfo, sshConfig) {
     const results = [];
     const maxMessageLength = 1500; // Maximum length of a Discord message
 
-    // Différer la réponse initiale
+    // Differ the initial response while executing the commands
     await interaction.deferReply();
 
     for (let index = 0; index < commandInfo.length; index++) {
         const cmd = commandInfo[index];
         try {
             const output = await executeSSHCommand(cmd.command, sshConfig);
-            const status = cmd.checkOutput(output) ? 'Réussi' : 'Échec';
+            const status = cmd.checkOutput(output) ? 'Success' : 'Failed';
             results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}`);
         } catch (error) {
-            results.push(`${index + 1}. ${cmd.description} : Échec\nErreur: ${error.message}`);
+            results.push(`${index + 1}. ${cmd.description} : Failed\nError: ${error.message}`);
         }
     }
 
@@ -26,7 +27,7 @@ export async function executeCommands(interaction, commandInfo, sshConfig) {
 //----------------------------------------------------------------------------//
 
 
-// Fonction pour exécuter une commande SSH
+// Method to execute a command on the remote server via ssh
 function executeSSHCommand(command, sshConfig) {
     return new Promise((resolve, reject) => {
         const ssh = new ssh2.Client();
@@ -54,7 +55,7 @@ function executeSSHCommand(command, sshConfig) {
 //----------------------------------------------------------------------------//
 
 
-// Fonction pour envoyer les résultats par morceaux
+// Method to send the results by chunks
 async function sendResults(interaction, results, maxMessageLength) {
     let response = '';
     for (const result of results) {

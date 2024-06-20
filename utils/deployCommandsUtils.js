@@ -2,7 +2,7 @@ import { REST, Routes } from 'discord.js';
 import fs from 'fs/promises';
 import config from '../config.json' assert { type: "json" };
 
-// Récupère toutes les commandes à partir du dossier de commandes
+// Fetch all commands from the commands directory
 const commandsDirectory = await fs.readdir('./commands');
 const commands = [];
 
@@ -12,21 +12,21 @@ for (const commandFile of commandsDirectory) {
     if (command.data && command.data.name) {
         commands.push(command.data.toJSON());
     } else {
-        console.log(`[WARNING] La commande ${command} nécessite une méthode "data" et "execute".`);
+        console.log(`[WARNING] The command : ${command} need a Data or Execute method.`);
     }
 }
 
-// Crée une nouvelle instance de REST
+// Create a new instance of REST and set the token
 const rest = new REST().setToken(config.token);
 
-// Enregistre les commandes dans le bot
+// Save all commands in the bot client
 (async () => {
     try {
         const data = await rest.put(
             Routes.applicationCommands(config.clientId),
             { body: commands },
         );
-        console.log(`Chargement réussi de ${data.length} nouvelle(s) commande(s).`);
+        console.log(`Successful loading of ${data.length} new commands.`);
     } catch (error) {
         console.error(error);
     }

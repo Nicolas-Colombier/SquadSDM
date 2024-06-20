@@ -22,18 +22,18 @@ export async function handleCommand(interaction, client) {
     const command = client.commands.get(interaction.commandName);
 
     if (!command || typeof command.execute !== 'function') {
-        console.error(`La commande ${interaction.commandName} n'existe pas ou elle n'a pas de méthode à exécuter.`);
+        console.error(`The command : ${interaction.commandName} does not exist or is not valid.`);
         return;
     }
 
     try {
         await command.execute(interaction, client);
-        console.log(`La commande ${interaction.commandName} a été exécutée.`);
+        console.log(`The command : ${interaction.commandName} has been executed.`);
     } catch (error) {
-        console.error(error);
+        console.error(`Error while executing the command : ${error}`);
         if (!interaction.replied && !interaction.deferred) {
             await interaction.reply({
-                content: "Erreur lors de l'utilisation de cette commande",
+                content: "Error while executing the command.",
                 ephemeral: true
             });
         }

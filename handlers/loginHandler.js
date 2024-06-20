@@ -9,16 +9,16 @@ export async function loginBot(client) {
     if (config.token !== "") {
         try {
 
-            // Tant que le bot n'est pas connecté et que le nombre de tentatives est inférieur à maxTries, tenter de se connecter.
+            // While the bot is not connected and the number of tries is less than maxTries, try to connect.
             while (ok === false && tries < maxTries) {
                 ok = await client.login(config.token)
                     .then(() => {
                         client.user.setActivity(config.activity, { type: ActivityType.Watching });
 
                         client.once('ready', () => {
-                            console.log(`Connecté en tant que ${client.user.tag} sur ${client.guilds.cache.size} serveurs.`);
+                            console.log(`Connected as ${client.user.tag} on ${client.guilds.cache.size} servers.`);
 
-                            // Liste des serveurs sur lesquels le bot est connecté.
+                            // List all servers the bot is connected to
                             client.guilds.cache.forEach(guild => {
                                 console.log(` - ${guild.name}`);
                             });
@@ -26,20 +26,20 @@ export async function loginBot(client) {
                         return true
                     })
                     .catch(async (error) => {
-                        console.log(`${error} Nouvel essai...`);
+                        console.log(`${error} New try...`);
                         await new Promise(resolve => setTimeout(resolve, 3000));
                         tries++;
                         return false
                     });
             }
 
-            // Si après maxTries tentatives le bot n'est pas connecté, gérer l'erreur.
+            // If the bot is not connected after maxTries, display an error message.
             if (tries === maxTries) {
-                console.error('ERROR : Impossible de se connecter après plusieurs tentatives.');
+                console.error('ERROR : impossible to connect after 3 tries.');
             }
 
         } catch (error) {
-            console.error(`ERROR : Connexion impossible : ${error}`)
+            console.error(`ERROR : Connection impossible : ${error}`)
         }
     }
 }

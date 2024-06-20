@@ -9,13 +9,13 @@ export const generateConfigOptions = async (configPath, sshConfig, server) => {
         const directories = await listDirectories(configPath, sshConfig);
 
         if (!directories.length) {
-            console.log('Aucune configuration disponible.');
+            console.log('No configuration options found.');
             return null;
         }
 
         const selectMenu = new StringSelectMenuBuilder()
             .setCustomId(`selectConfig|${server}`)
-            .setPlaceholder('Sélectionnez une configuration');
+            .setPlaceholder('Select a configuration');
 
         directories.forEach(dir => {
             selectMenu.addOptions(
@@ -29,7 +29,7 @@ export const generateConfigOptions = async (configPath, sshConfig, server) => {
 
         return { choice };
     } catch (error) {
-        console.error(`Erreur lors de la génération des options de configuration : ${error}`);
+        console.error(`Error while executing the command : ${error}`);
         return null;
     }
 };
@@ -39,10 +39,10 @@ export const generateConfigOptions = async (configPath, sshConfig, server) => {
 
 
 export async function handleConfigSelection(interaction) {
-    if (!interaction.isStringSelectMenu()) return; // Vérifiez que l'interaction est un menu déroulant
+    if (!interaction.isStringSelectMenu()) return; // Check if the interaction is a string select menu
     const configName = interaction.values[0];
 
-    // Récupérer le nom du serveur à partir de l'interaction
+    // Get the server name from the customId
     const server = interaction.customId.split('|')[1];
     const serverConfig = config.servers[server];
 
@@ -59,15 +59,15 @@ export async function handleConfigSelection(interaction) {
 
         const commandInfo = [
             {
-                // Supprime tous les fichiers du répertoire de destination
+                // Delete all files from the destination directory
                 command: `rm -rf ${destinationDirectory}/*`,
-                description: `Suppression de tous les fichiers du répertoire de destination "${destinationDirectory}"`,
+                description: `Deleting all files from the destination directory : "${destinationDirectory}"`,
                 checkOutput: (output) => true,
             },
             {
-                // Copie de tous les fichiers de la configuration sélectionnée vers le répertoire de destination
+                // Copy all files from the configuration directory to the destination directory
                 command: `cp -r ${configDirectory}${configName}/* ${destinationDirectory}`,
-                description: `Copie de tous les fichiers de la configuration "${configName}" vers "${destinationDirectory}"`,
+                description: `Copying all files from the "${configName}" config to "${destinationDirectory}"`,
                 checkOutput: (output) => true,
             },
         ];
@@ -75,7 +75,10 @@ export async function handleConfigSelection(interaction) {
         await executeCommands(interaction, commandInfo, serverConfig.ssh);
 
     } catch (error) {
-        console.error(error);
-        await interaction.update('Il y a eu une erreur en tentant de changer la configuration du serveur.');
+        console.error(`Error while executing the command : ${error}`);
+        await interaction.update({
+            content: "Error while executing the command.",
+            ephemeral: true
+        });
     }
 }

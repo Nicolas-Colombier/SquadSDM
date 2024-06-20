@@ -13,31 +13,31 @@ export function listDirectories(directory, sshConfig) {
 
                 let output = '';
 
-                // Accumulation des données reçues
+                // Gathering data from the stream
                 stream.on('data', (data) => {
                     output += data.toString();
                 });
 
-                // Événement déclenché lorsque le flux de données est fermé
+                // Triggered events when the stream is closed
                 stream.on('close', (code, signal) => {
                     const directories = output
-                        .split('\n') // Séparation des lignes
-                        .filter(line => line.trim().length > 0) // Filtrage des lignes vides
-                        .map(line => line.trim().replace(directory, '').replace('/', '')) // Suppression du chemin de base et du '/' final
-                        .filter(dir => dir.length > 0); // S'assurer que les noms de répertoires ne sont pas vides
-                    conn.end(); // Fermeture de la connexion SSH
-                    resolve(directories); // Résolution de la promesse avec la liste des répertoires
+                        .split('\n') // Line splitting
+                        .filter(line => line.trim().length > 0) // Filtering empty lines
+                        .map(line => line.trim().replace(directory, '').replace('/', '')) // Formatting the output
+                        .filter(dir => dir.length > 0); // Filtering empty directories
+                    conn.end(); // Closing the connection
+                    resolve(directories); // Resolution of the promise with the list of directories
                 });
 
-                // Gestion des erreurs sur le flux de données
+                // Error handling
                 stream.on('error', (err) => {
                     conn.end();
                     reject(err);
                 });
             });
-        }).connect(sshConfig); // Connexion au serveur SSH avec la configuration spécifiée
+        }).connect(sshConfig); // Connection to the server with the specified SSH configuration
 
-        // Gestion des erreurs sur la connexion
+        // Error handling on connection
         conn.on('error', (err) => {
             reject(err);
         });

@@ -3,8 +3,8 @@ import config from '../config.json' assert { type: "json" };
 
 const rest = new REST().setToken(config.token);
 
-// Supprime toutes les commandes existantes du bot
+// Delete all commands of the bot client
 rest.put(Routes.applicationCommands(config.clientId), { body: [] })
-    .then(() => console.log('Suppression réussie de toutes les commandes du bot.'))
+    .then(() => console.log('Deletion of all commands complete.'))
     .catch(console.error);
 

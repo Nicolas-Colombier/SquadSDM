@@ -3,13 +3,13 @@ import config from '../config.json' assert { type: "json" };
 import { executeCommands } from '../utils/executeCommands.js';
 import { checkDirectoryExists } from "../utils/checkDirectoryExists.js";
 
-// Génération dynamique des choix pour les serveurs
+// Dynamic generation of choices for servers
 const serverChoices = Object.keys(config.servers).map(server => ({
     name: server,
     value: server
 }));
 
-// Génération dynamique des choix
+// Dynamic generation of choices for mods
 const modChoices = config.mods.map(mod => ({
     name: mod.name,
     value: mod.id
@@ -17,31 +17,30 @@ const modChoices = config.mods.map(mod => ({
 
 export const data = new SlashCommandBuilder()
     .setName('deletemod')
-    .setDescription('Suppresion d\'un mod.')
+    .setDescription('Delete a mod')
     .addStringOption(option =>
         option.setName('server')
-            .setDescription('Nom du serveur')
+            .setDescription('Server name')
             .setRequired(true)
             .addChoices(...serverChoices))
     .addStringOption(option =>
         option.setName('modid')
-            .setDescription('ID du mod')
+            .setDescription('Mod ID')
             .setRequired(true)
             .addChoices(...modChoices))
-    // (0) = Nécessite la permission d'administrateur
+    // (0) = Need to be an admin to use this command
     .setDefaultMemberPermissions(0)
-    // Permet ou non l'exécution de la commande en message privé
+    // Define if the command can be used in DM
     .setDMPermission(false)
     .addStringOption(option =>
         option.setName('customid')
-            .setDescription('ID personnalisé')
+            .setDescription('Customized ID')
             .setRequired(false));
 
 export async function execute(interaction) {
     try {
-        // Vérifiez les permissions de l'utilisateur
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-            return await interaction.reply('Vous n\'avez pas la permission de supprimer un mod du serveur.');
+            return await interaction.reply('You do not have the required permissions to use this command.');
         }
 
         const server = interaction.options.getString('server');
@@ -50,13 +49,13 @@ export async function execute(interaction) {
         let modId = interaction.options.getString('modid');
         const customModId = interaction.options.getString('customid');
 
-        // Si l'utilisateur a sélectionné 'Custom Mod ID', utilisez l'ID personnalisé fourni
+        // If the user selected a custom mod ID, use that instead of the default one
         if (modId === ' ' && customModId) {
             modId = customModId;
         }
 
         if (!modId) {
-            return await interaction.reply('Veuillez fournir un ID de mod valide.');
+            return await interaction.reply('Please provide a valid mod ID.');
         }
 
         const modDirectory = serverConfig.modPath + "/" + modId;
@@ -64,14 +63,14 @@ export async function execute(interaction) {
         const directoryExists = await checkDirectoryExists(modDirectory, serverConfig.ssh);
 
         if (!directoryExists) {
-            await interaction.reply(`\`\`\`Le mod "${modId}" n'existe pas.\`\`\``);
+            await interaction.reply(`\`\`\`The mod "${modId}" does not exist.\`\`\``);
             return;
         }
 
         const commandInfo = [
             {
                 command: `rm -rf ${modDirectory}`,
-                description: `Suppression du mod "${modId}"`,
+                description: `Deleting mod "${modId}"`,
                 checkOutput: (output) => !output.toLowerCase().includes('error'),
             },
         ];
@@ -79,6 +78,6 @@ export async function execute(interaction) {
         await executeCommands(interaction, commandInfo, serverConfig.ssh);
     } catch (error) {
         console.error(error);
-        await interaction.reply('Il y a eu une erreur en tentant de supprimer un mod du serveur.');
+        await interaction.reply('There was an error while trying to execute this command!');
     }
 }

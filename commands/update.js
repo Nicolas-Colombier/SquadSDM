@@ -2,7 +2,7 @@ import { SlashCommandBuilder, PermissionsBitField } from 'discord.js';
 import config from '../config.json' assert { type: "json" };
 import { executeCommands } from '../utils/executeCommands.js';
 
-// Génération dynamique des choix pour les serveurs
+// Dynamic generation of choices for servers
 const serverChoices = Object.keys(config.servers).map(server => ({
     name: server,
     value: server
@@ -10,22 +10,21 @@ const serverChoices = Object.keys(config.servers).map(server => ({
 
 export const data = new SlashCommandBuilder()
     .setName('update')
-    .setDescription('Mise à jour du serveur.')
+    .setDescription('Update the server.')
     .addStringOption(option =>
         option.setName('server')
-            .setDescription('Nom du serveur')
+            .setDescription('Server name')
             .setRequired(true)
             .addChoices(...serverChoices))
-    // (0) = Nécessite la permission d'administrateur
+    // (0) = Need to be an admin to use this command
     .setDefaultMemberPermissions(0)
-    // Permet ou non l'exécution de la commande en message privé
+    // Define if the command can be used in DM
     .setDMPermission(false);
 
 export async function execute(interaction) {
     try {
-        // Vérifiez les permissions de l'utilisateur
         if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-            return await interaction.reply('Vous n\'avez pas la permission de mettre à jour le serveur.');
+            return await interaction.reply('You do not have the required permissions to use this command.');
         }
 
         const server = interaction.options.getString('server');
@@ -34,7 +33,7 @@ export async function execute(interaction) {
         const commandInfo = [
             {
                 command: `${serverConfig.serverPath} update`,
-                description: 'Mise à jour du serveur',
+                description: 'Updating server',
                 checkOutput: (output) => true,
             },
         ];
@@ -42,6 +41,6 @@ export async function execute(interaction) {
         await executeCommands(interaction, commandInfo, serverConfig.ssh);
     } catch (error) {
         console.error(error);
-        await interaction.reply('Il y a eu une erreur en tentant de mettre à jour le serveur.');
+        await interaction.reply('There was an error while trying to execute this command!');
     }
 }
