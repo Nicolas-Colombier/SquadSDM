@@ -30,11 +30,12 @@ If you need help, contact me on Discord : **nom4de**
 <br>
 
 ## Requirements
+* Linux machine only
 * Git
 * [Node.js](https://nodejs.org/en/)
 * [LinuxGSM Squad server](https://linuxgsm.com/servers/squadserver/)
 * [SteamCMD](https://docs.linuxgsm.com/steamcmd)
-* SSH access to the server
+* SSH & Sudo access to the server hosting the Squad server
 
 <br>
 
@@ -73,25 +74,37 @@ SSH2 client and server modules written in pure JavaScript for node.js.
 git clone https://github.com/Nicolas-Colombier/SquadSDM.git
 ```
 
-2. Install `npm` dependencies :
+2. Go to the bot directory :
+
+```sh
+cd SquadSDM
+```
+
+3. Install `npm` dependencies :
 
 ```sh
 npm install
 ```
 
-3. Create a `config.json` file using the `config.json.example` template :
+4. Create a `config.json` file using the `config.json.example` template :
 
 ```sh
 cp config.json.example config.json
 ```
 
-4. Edit the `config.json` file with your Discord bot token and your Squad server SSH credentials :
+5. Edit the `config.json` file with your Discord bot token and your Squad server SSH credentials :
 - `token` : Your Discord bot token
 - `activity` : The activity the bot will display (eg. "**Watching** *your activity*")
 - `clientID` : Your Discord bot client ID
 - `guildID` : Your Discord server ID
 - `mods` : The list of mods that will be in the 'updatemod' and 'deletemod' commands (**DO NOT DELETE THE LAST ONE**).
 - `server` : Each object is a server, if you have more then just add more object (be careful of the syntaxe). Each server can be on a different machine or user but need SSH access.
+
+6. Deploy the commands on the bot :
+
+```sh
+node utils/deployCommandsUtils.js
+```
 
 <br>
 
