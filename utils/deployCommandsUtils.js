@@ -1,6 +1,6 @@
 import { REST, Routes } from 'discord.js';
 import fs from 'fs/promises';
-import config from '../config.json' assert { type: "json" };
+import config from '../config.json' with { type: "json" };
 
 // Fetch all commands from the commands directory
 const commandsDirectory = await fs.readdir('./commands');

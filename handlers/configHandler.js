@@ -1,7 +1,7 @@
 import { executeCommands } from "../utils/executeCommands.js";
 import { checkDirectoryExists } from "../utils/checkDirectoryExists.js";
 import { listDirectories } from "../utils/listDirectories.js";
-import config from '../config.json' assert { type: "json" };
+import config from '../config.json' with { type: "json" };
 import {ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder} from "discord.js";
 
 export const generateConfigOptions = async (configPath, sshConfig, server) => {

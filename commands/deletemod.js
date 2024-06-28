@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionsBitField } from 'discord.js';
-import config from '../config.json' assert { type: "json" };
+import config from '../config.json' with { type: "json" };
 import { executeCommands } from '../utils/executeCommands.js';
 import { checkDirectoryExists } from "../utils/checkDirectoryExists.js";
 

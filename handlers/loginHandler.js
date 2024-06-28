@@ -1,4 +1,4 @@
-import config from '../config.json' assert { type: "json" };
+import config from '../config.json' with { type: "json" };
 import { ActivityType } from 'discord.js';
 
 export async function loginBot(client) {

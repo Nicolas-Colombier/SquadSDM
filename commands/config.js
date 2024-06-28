@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, PermissionsBitField } from 'discord.js';
-import config from '../config.json' assert { type: "json" };
+import config from '../config.json' with { type: "json" };
 import {generateConfigOptions} from "../handlers/configHandler.js";
 
 // Dynamic generation of choices for servers
