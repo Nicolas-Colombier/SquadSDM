@@ -12,6 +12,7 @@
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#requirements">Requirements</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#dependencies">Dependencies</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#discord-bot-identity">Discord bot identity</a> •
+    <a href="https://github.com/Nicolas-Colombier/SquadSDM#installation">Installation</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#running-the-bot">Running the bot</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#usage--management">Usage & Management</a> •
     <a href="https://github.com/Nicolas-Colombier/SquadSDM#credits">Credits</a>
