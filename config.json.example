@@ -4,6 +4,7 @@
   "clientId": "bot_client_id",
   "guildId": "guild_id",
   "mods": [
+    { "name": "SuperMod", "id": "3293347373" },
     { "name": "French Faction", "id": "2618610732" },
     { "name": "Douentza", "id": "2618861931" },
     { "name": "Entrer manuellement", "id": " " }
