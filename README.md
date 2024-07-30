@@ -40,7 +40,7 @@ If you need help, contact me on Discord : **nom4de**
 ## Requirements
 * Linux machine only
 * Git
-* [Node.js](https://nodejs.org/en/)
+* [Latest Node.js version](https://nodejs.org/en/)
 * [LinuxGSM Squad server](https://linuxgsm.com/servers/squadserver/)
 * [SteamCMD](https://docs.linuxgsm.com/steamcmd)
 * SSH & Sudo access to the server hosting the Squad server
@@ -134,10 +134,9 @@ Description=Squad SDM
 Type=simple
 User=name_of_your_linux_user
 WorkingDirectory=/home/****/path_to_the_bot
-ExecStart=/usr/path_to_node /home/****/path_to_the_bot/index.js
+ExecStart=/usr/bin/path_to_node /home/****/path_to_the_bot/index.js
 Restart=always
 RestartSec=3
-StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=name_of_your_linux_user
 
