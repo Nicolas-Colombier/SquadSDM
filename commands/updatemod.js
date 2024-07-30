@@ -27,7 +27,7 @@ export const data = new SlashCommandBuilder()
             .setDescription('Mod ID')
             .setRequired(true)
             .addChoices(...modChoices))
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.UseApplicationCommands)
     // Define if the command can be used in DM
     .setDMPermission(false)
     .addStringOption(option =>

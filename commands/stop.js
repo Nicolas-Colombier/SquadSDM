@@ -16,7 +16,7 @@ export const data = new SlashCommandBuilder()
             .setDescription('Server name')
             .setRequired(true)
             .addChoices(...serverChoices))
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.UseApplicationCommands)
     // Define if the command can be used in DM
     .setDMPermission(false);
 
