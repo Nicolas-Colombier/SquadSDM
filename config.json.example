@@ -7,7 +7,7 @@
     { "name": "SuperMod", "id": "3293347373" },
     { "name": "French Faction", "id": "2618610732" },
     { "name": "Douentza", "id": "2618861931" },
-    { "name": "Entrer manuellement", "id": " " }
+    { "name": "Enter manually", "id": " " }
   ],
   "servers": {
     "serverName1": {
@@ -15,6 +15,17 @@
       "modPath": "/home/*****/serverfiles/SquadGame/Plugins/Mods/393380",
       "configPath": "/home/*****/config/",
       "serverConfigPath": "/home/*****/serverfiles/SquadGame/ServerConfig",
+      "allowedChannels": ["channel_id","channel_id"],
+      "roles": {
+        "configRole": ["role_id","role_id"],
+        "deleteModRole": ["role_id","role_id"],
+        "detailsRole": ["role_id","role_id"],
+        "restartRole": ["role_id","role_id"],
+        "startRole": ["role_id","role_id"],
+        "stopRole": ["role_id","role_id"],
+        "updateRole": ["role_id","role_id"],
+        "updateModRole": ["role_id","role_id"]
+      },
       "ssh": {
         "host": "server_ip_address",
         "port": 22,
@@ -27,6 +38,17 @@
       "modPath": "/home/*****/serverfiles/SquadGame/Plugins/Mods/393380",
       "configPath": "/home/*****/config/",
       "serverConfigPath": "/home/*****/serverfiles/SquadGame/ServerConfig",
+      "allowedChannels": ["channel_id","channel_id"],
+      "roles": {
+        "configRole": ["role_id","role_id"],
+        "deleteModRole": ["role_id","role_id"],
+        "detailsRole": ["role_id","role_id"],
+        "restartRole": ["role_id","role_id"],
+        "startRole": ["role_id","role_id"],
+        "stopRole": ["role_id","role_id"],
+        "updateRole": ["role_id","role_id"],
+        "updateModRole": ["role_id","role_id"]
+      },
       "ssh": {
         "host": "server_ip_address",
         "port": 22,

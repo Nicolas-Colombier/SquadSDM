@@ -16,19 +16,26 @@ export const data = new SlashCommandBuilder()
             .setDescription('Server name')
             .setRequired(true)
             .addChoices(...serverChoices))
-    // (0) = Need to be an admin to use this command
-    .setDefaultMemberPermissions(0)
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
     // Define if the command can be used in DM
     .setDMPermission(false);
 
 export async function execute(interaction) {
     try {
-        if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-            return await interaction.reply('You do not have the required permissions to use this command.');
-        }
-
         const server = interaction.options.getString('server');
         const serverConfig = config.servers[server];
+
+        // Check if the command is used in an allowed channel
+        const channelId = interaction.channelId;
+        const allowedChannel = serverConfig.allowedChannels.includes(channelId);
+
+        // Check if user has any of the allowed roles for the server
+        const memberRoles = interaction.member.roles.cache.map(role => role.id);
+        const hasPermission = serverConfig.roles.stopRole.some(role => memberRoles.includes(role));
+
+        if (!hasPermission || !allowedChannel) {
+            return await interaction.reply('You do not have the required permissions.');
+        }
 
         const commandInfo = [
             {
