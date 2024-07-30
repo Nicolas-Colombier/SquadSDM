@@ -40,7 +40,7 @@ If you need help, contact me on Discord : **nom4de**
 ## Requirements
 * Linux machine only
 * Git
-* [Latest Node.js version](https://nodejs.org/en/)
+* [Node.js v20.16.0](https://nodejs.org/en/)
 * [LinuxGSM Squad server](https://linuxgsm.com/servers/squadserver/)
 * [SteamCMD](https://docs.linuxgsm.com/steamcmd)
 * SSH & Sudo access to the server hosting the Squad server
