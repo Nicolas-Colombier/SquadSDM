@@ -107,12 +107,15 @@ cp config.json.example config.json
 - `guildID` : Your Discord server ID
 - `mods` : The list of mods that will be in the 'updatemod' and 'deletemod' commands (**DO NOT DELETE THE LAST ONE**).
 - `server` : Each object is a server, if you have more then just add more object (be careful of the syntaxe). Each server can be on a different machine or user but need SSH access.
+- `allowedChannels` : The ID of the channels where the bot can be used for this specific server (if empty, the bot can be used in all channels).
+- `roles` : Each key is a command and the value is the ID of the role that can use this command (if empty, the command cannot be used).
 
 6. Deploy the commands on the bot :
 
 ```sh
 node utils/deployCommandsUtils.js
 ```
+**DISCLAIMER** : This command need to be executed each time SquadSDM is updated.
 
 <br>
 
@@ -137,7 +140,6 @@ WorkingDirectory=/home/****/path_to_the_bot
 ExecStart=/usr/bin/path_to_node /home/****/path_to_the_bot/index.js
 Restart=always
 RestartSec=3
-StandardError=syslog
 SyslogIdentifier=name_of_your_linux_user
 
 [Install]
