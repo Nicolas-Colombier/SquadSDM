@@ -49,7 +49,8 @@ export async function execute(interaction) {
         const hasPermission = serverConfig.roles.updateModRole.some(role => memberRoles.includes(role));
 
         if (!hasPermission || !allowedChannel) {
-            return await interaction.reply('You do not have the required permissions.');
+            await interaction.reply({ content: 'You do not have the required permissions.', ephemeral: true });
+            return;
         }
 
         let modId = interaction.options.getString('modid');
@@ -61,7 +62,7 @@ export async function execute(interaction) {
         }
 
         if (!modId) {
-            return await interaction.reply('Please provide a valid mod ID.');
+            return await interaction.reply({ content: 'Please provide a valid mod ID.', ephemeral: true });
         }
 
         const commandInfo = [
@@ -95,6 +96,16 @@ export async function execute(interaction) {
         await executeCommands(interaction, commandInfo, serverConfig.ssh);
     } catch (error) {
         console.error(error);
-        await interaction.reply('There was an error while trying to execute this command!');
+        if (!interaction.replied) {
+            await interaction.reply({
+                content: 'There was an error while trying to execute this command!',
+                ephemeral: true
+            });
+        } else if (interaction.deferred) {
+            await interaction.followUp({
+                content: 'There was an error while trying to execute this command!',
+                ephemeral: true
+            });
+        }
     }
 }

@@ -35,13 +35,15 @@ export async function execute(interaction) {
         const hasPermission = serverConfig.roles.configRole.some(role => memberRoles.includes(role));
 
         if (!hasPermission || !allowedChannel) {
-            return await interaction.reply('You do not have the required permissions.');
+            await interaction.reply({ content: 'You do not have the required permissions.', ephemeral: true });
+            return;
         }
 
         const response = await generateConfigOptions(serverConfig.configPath, serverConfig.ssh, server);
 
         if (!response) {
-            return await interaction.reply('No configuration options found.');
+            await interaction.reply({ content: 'No configuration options found.', ephemeral: true });
+            return;
         }
 
         await interaction.reply({
@@ -53,6 +55,16 @@ export async function execute(interaction) {
         return server;
     } catch (error) {
         console.error(error);
-        await interaction.reply('There was an error while trying to execute this command!');
+        if (!interaction.replied) {
+            await interaction.reply({
+                content: 'There was an error while trying to execute this command!',
+                ephemeral: true
+            });
+        } else if (interaction.deferred) {
+            await interaction.followUp({
+                content: 'There was an error while trying to execute this command!',
+                ephemeral: true
+            });
+        }
     }
 }
