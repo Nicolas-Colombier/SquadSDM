@@ -23,17 +23,20 @@
 
 ## Overview
 
-**SSDM** is a Discord bot adapted to manage your LinuxGSM Squad server.
+**SSDM** is a Discord bot adapted to manage your LinuxGSM Squad servers.
 
 It provides essential features like:
 
 - Start/Stop/Restart server
 - Update server
-- Get server status
-- Manage server configuration
+- Get server details
+- Manage multiple server configuration
 - Install/Update/Delete mods
+- Limit the usage to specific discord channels
+- Limit the usage to specific discord roles
+- Manage multiple servers that have independent permissions
 
-If you need help, contact me on Discord : **nom4de**
+If you need help or you want to share an idea for this bot, contact me on Discord : **nom4de**
 
 <br>
 
