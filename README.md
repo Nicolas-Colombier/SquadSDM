@@ -189,8 +189,11 @@ Stop the bot (requires sudo access) :
 sudo systemctl stop squad_sdm
 ```
 
-Take a look to the logs (requires sudo access) :
+Take a look to the status and logs (requires sudo access) :
 
+```sh
+sudo systemctl status squad_sdm
+```
 ```sh
 sudo journalctl -u squad_sdm
 ```
