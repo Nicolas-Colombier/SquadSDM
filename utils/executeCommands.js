@@ -1,5 +1,5 @@
 import ssh2 from 'ssh2';
-import { chunkString } from "./chunkString.js";
+import {chunkString, replaceEscapeSequences} from "./chunkString.js";
 
 // Method to execute a list of commands
 export async function executeCommands(interaction, commandInfo, sshConfig) {
@@ -13,10 +13,16 @@ export async function executeCommands(interaction, commandInfo, sshConfig) {
         const cmd = commandInfo[index];
         try {
             const output = await executeSSHCommand(cmd.command, sshConfig);
-            const status = cmd.checkOutput(output) ? 'Success' : 'Failed';
-            results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}`);
+            const status = cmd.checkOutput(output) ? 'Success' : 'Failed' || 'error';
+            results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}\n`);
+
+            if (status === 'Failed' || status === 'error') {
+                console.error(`Command '${cmd.command}' failed with output: ${output}\n`);
+                break; // Stop executing further commands if there was a failure.
+            }
         } catch (error) {
             results.push(`${index + 1}. ${cmd.description} : Failed\nError: ${error.message}`);
+            break;
         }
     }
 
@@ -43,7 +49,9 @@ function executeSSHCommand(command, sshConfig) {
                 });
                 stream.on('close', () => {
                     ssh.end();
-                    resolve(output);
+                    const cleanOutput = replaceEscapeSequences(output);
+                    console.log(`Command: ${command}\nOutput: ${cleanOutput}`);
+                    resolve(cleanOutput);
                 });
             });
         }).on('error', reject)
@@ -59,7 +67,7 @@ function executeSSHCommand(command, sshConfig) {
 async function sendResults(interaction, results, maxMessageLength) {
     let response = '';
     for (const result of results) {
-        response += `${result}\n`;
+        response += `${result}`;
         if (response.length > maxMessageLength) {
             const chunks = chunkString(response, maxMessageLength-4);
             await interaction.editReply({ content: `\`\`\`${chunks.shift()}\`\`\`` });
