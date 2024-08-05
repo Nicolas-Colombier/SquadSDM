@@ -69,17 +69,12 @@ export async function execute(interaction) {
             {
                 command: `/usr/games/steamcmd +force_install_dir "${serverConfig.modPath}" +login anonymous +workshop_download_item 393380 ${modId} validate +quit`,
                 description: 'Downloading mod from Steam Workshop',
-                checkOutput: (output) => output.includes('Success'),
+                checkOutput: (output) => output.includes('Success' || 'error'),
             },
             {
                 command: `rm -r ${serverConfig.modPath}/${modId}`,
                 description: 'Deleting old mod directory',
                 checkOutput: (output) => true,
-            },
-            {
-                command: 'sleep 1m',
-                description: '1 minute delay',
-                checkOutput: () => true,
             },
             {
                 command: `mv ${serverConfig.modPath}/steamapps/workshop/content/393380/${modId} ${serverConfig.modPath}`,
