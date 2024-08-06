@@ -67,9 +67,9 @@ export async function execute(interaction) {
 
         const commandInfo = [
             {
-                command: `steamcmd +force_install_dir "${serverConfig.modPath}" +login anonymous +workshop_download_item 393380 ${modId} validate +quit`,
+                command: `steamcmd -tcp +force_install_dir "${serverConfig.modPath}" +login anonymous +workshop_download_item 393380 ${modId} validate +quit`,
                 description: 'Downloading mod from Steam Workshop',
-                checkOutput: (output) => output.includes('Success' || 'error'),
+                checkOutput: (output) => output.includes('Success. Downloaded item'),
             },
             {
                 command: `rm -r ${serverConfig.modPath}/${modId}`,
