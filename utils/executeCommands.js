@@ -14,7 +14,7 @@ export async function executeCommands(interaction, commandInfo, sshConfig) {
         try {
             const output = await executeSSHCommand(cmd.command, sshConfig);
             const status = cmd.checkOutput(output) ? 'Success' : 'Failed' || 'error';
-            results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}\n`);
+            results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}\n\n`);
 
             if (status === 'Failed' || status === 'error') {
                 console.error(`Command '${cmd.command}' failed with output: ${output}\n`);
