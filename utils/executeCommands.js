@@ -6,17 +6,17 @@ export async function executeCommands(interaction, commandInfo, sshConfig) {
     const results = [];
     const maxMessageLength = 1500; // Maximum length of a Discord message
 
-    // Differ the initial response while executing the commands
+    // Defer the initial response while executing the commands
     await interaction.deferReply();
 
     for (let index = 0; index < commandInfo.length; index++) {
         const cmd = commandInfo[index];
         try {
-            const output = await executeSSHCommand(cmd.command, sshConfig);
-            const status = cmd.checkOutput(output) ? 'Success' : 'Failed' || 'error';
+            const output = await executeSSHCommand(interaction, cmd.command, sshConfig, cmd.description);
+            const status = cmd.checkOutput(output) ? 'Success' : 'Failed';
             results.push(`${index + 1}. ${cmd.description} : ${status}\n${output}\n\n`);
 
-            if (status === 'Failed' || status === 'error') {
+            if (status === 'Failed') {
                 console.error(`Command '${cmd.command}' failed with output: ${output}\n`);
                 break; // Stop executing further commands if there was a failure.
             }
@@ -30,32 +30,66 @@ export async function executeCommands(interaction, commandInfo, sshConfig) {
 }
 
 
+
 //----------------------------------------------------------------------------//
 
 
-// Method to execute a command on the remote server via ssh
-function executeSSHCommand(command, sshConfig) {
+// Method to execute a command on the remote server via ssh with keep-alive and live edit replies
+function executeSSHCommand(interaction, command, sshConfig, description) {
     return new Promise((resolve, reject) => {
         const ssh = new ssh2.Client();
         ssh.on('ready', () => {
-            ssh.exec(command, (err, stream) => {
+            console.log(`SSH connection ready for command: ${command}`);
+            ssh.exec(command, async (err, stream) => {
                 if (err) {
                     ssh.end();
                     return reject(err);
                 }
                 let output = '';
-                stream.on('data', (data) => {
+                let lastEdit = Date.now();
+                const editInterval = 2000; // Edit reply every 2 seconds to avoid rate limiting
+                let liveUpdate = true;
+
+                stream.on('data', async (data) => {
                     output += data.toString();
+                    const now = Date.now();
+
+                    if (output.length > 1500) {
+                        liveUpdate = false;
+                    }
+
+                    if (liveUpdate && (now - lastEdit > editInterval)) {
+                        lastEdit = now;
+                        const partialCleanOutput = replaceEscapeSequences(output);
+                        await interaction.editReply({ content: `\`\`\`${partialCleanOutput}\`\`\`` });
+                    }
                 });
-                stream.on('close', () => {
+
+                stream.stderr.on('data', (data) => {
+                    console.error(`SSH : ${data.toString()}`);
+                });
+
+                stream.on('close', async () => {
                     ssh.end();
                     const cleanOutput = replaceEscapeSequences(output);
                     console.log(`Command: ${command}\nOutput: ${cleanOutput}`);
+                    if (liveUpdate) {
+                        await interaction.editReply({ content: `\`\`\`${description} :\n${cleanOutput}\`\`\`` });
+                    }
                     resolve(cleanOutput);
                 });
             });
-        }).on('error', reject)
-            .connect(sshConfig);
+        }).on('error', (err) => {
+            console.error(`SSH connection error: ${err.message}`);
+            reject(err);
+        }).on('close', () => {
+            console.log('SSH connection closed');
+        }).connect({
+            ...sshConfig,
+            keepaliveInterval: 30 * 1000, // Send keepalive packets every 30 seconds
+            keepaliveCountMax: 15, // Maximum keepalive messages before considering the connection dead
+            readyTimeout: 0 // Wait indefinitely for the server to respond
+        });
     });
 }
 
