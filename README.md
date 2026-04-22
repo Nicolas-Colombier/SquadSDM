@@ -29,6 +29,7 @@ It provides essential features like:
 
 - Start/Stop/Restart server
 - Update server
+- Switch server Steam branch (beta/private)
 - Get server details
 - Manage multiple server configuration
 - Install/Update/Delete mods
@@ -110,6 +111,11 @@ cp config.json.example config.json
 - `guildID` : Your Discord server ID
 - `mods` : The list of mods that will be in the 'updatemod' and 'deletemod' commands (**DO NOT DELETE THE LAST ONE**).
 - `server` : Each object is a server, if you have more then just add more object (be careful of the syntaxe). Each server can be on a different machine or user but need SSH access.
+- `installPath` : (Optional) Path to the dedicated server install root (for `/branch`, usually `/home/<user>/serverfiles`).
+- `branches` : Branch presets used by `/branch` command.
+- `branches.public.name` : The normal branch (`public`).
+- `branches.privateTest.name` : Your private test branch name.
+- `branches.privateTest.password` : Password for the private test branch.
 - `allowedChannels` : The ID of the channels where the bot can be used for this specific server (if empty, the bot can be used in all channels).
 - `roles` : Each key is a command and the value is the ID of the role that can use this command (if empty, the command cannot be used).
 

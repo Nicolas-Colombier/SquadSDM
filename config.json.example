@@ -12,6 +12,16 @@
   "servers": {
     "serverName1": {
       "serverPath": "/home/*****/squadserver",
+      "installPath": "/home/*****/serverfiles",
+      "branches": {
+        "public": {
+          "name": "public"
+        },
+        "privateTest": {
+          "name": "private_test_branch_name",
+          "password": "private_test_branch_password"
+        }
+      },
       "modPath": "/home/*****/serverfiles/SquadGame/Plugins/Mods/393380",
       "configPath": "/home/*****/config/",
       "serverConfigPath": "/home/*****/serverfiles/SquadGame/ServerConfig",
@@ -23,6 +33,7 @@
         "restartRole": ["role_id","role_id"],
         "startRole": ["role_id","role_id"],
         "stopRole": ["role_id","role_id"],
+        "branchRole": ["role_id","role_id"],
         "updateRole": ["role_id","role_id"],
         "updateModRole": ["role_id","role_id"]
       },
@@ -35,6 +46,16 @@
     },
     "serverName2": {
       "serverPath": "/home/*****/squadserver",
+      "installPath": "/home/*****/serverfiles",
+      "branches": {
+        "public": {
+          "name": "public"
+        },
+        "privateTest": {
+          "name": "private_test_branch_name",
+          "password": "private_test_branch_password"
+        }
+      },
       "modPath": "/home/*****/serverfiles/SquadGame/Plugins/Mods/393380",
       "configPath": "/home/*****/config/",
       "serverConfigPath": "/home/*****/serverfiles/SquadGame/ServerConfig",
@@ -46,6 +67,7 @@
         "restartRole": ["role_id","role_id"],
         "startRole": ["role_id","role_id"],
         "stopRole": ["role_id","role_id"],
+        "branchRole": ["role_id","role_id"],
         "updateRole": ["role_id","role_id"],
         "updateModRole": ["role_id","role_id"]
       },

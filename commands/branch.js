@@ -58,7 +58,7 @@ export async function execute(interaction) {
 
         // Check if user has any of the allowed roles for the server
         const memberRoles = interaction.member.roles.cache.map(role => role.id);
-        const branchRoles = serverConfig.roles.branchRole ?? serverConfig.roles.updateRole ?? [];
+        const branchRoles = serverConfig.roles.branchRole ?? [];
         const hasPermission = branchRoles.some(role => memberRoles.includes(role));
 
         if (!hasPermission || !allowedChannel) {
